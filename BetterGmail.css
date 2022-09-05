@@ -1,0 +1,177 @@
+/* ==UserStyle==
+@name           Gmail Be Pretty
+@namespace      github.com/TheCubiq/CssGmail
+@version        1.0.0
+@description    Basically, Better gmail
+@author         Cubiq
+==/UserStyle== */
+@-moz-document domain("mail.google.com") {
+
+	/* 	remove mail/meet panel */
+	.aeN.WR.BaIAZe.a6o.anZ.nH.oy8Mbf {
+		display: none;
+	}
+
+	/*  left menu hamburger bg */
+	.WR.aeN,
+	.a6o::before {
+		background: none !important;
+	}
+
+	/* 	Compose button */
+	.T-I.T-I-KE.L3 {
+		margin-left: 14px;
+		border-radius: 100px;
+	}
+
+	/* 	search in mail */
+	.gb_Kd.gb_Ud.gb_Ne.gb_Ce {
+		opacity: 0;
+		transform: translateY(-12px);
+		transition: 0.2s all;
+	}
+
+	/* 	search in mail hover */
+	.gb_Kd.gb_Ud.gb_Ne.gb_Ce:hover {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* 	main email panel */
+	.zA.y0,
+	.zA {
+		padding: 12px 0 !important;
+		/* 		background: white; */
+		transition: all 0.3s ease;
+	}
+
+	/* hovered email	 */
+	.zA.y0:hover,
+	.zA:hover,
+	.zA.zE:hover {
+		box-shadow: inset 0 -1px 0 0 rgb(104, 104, 104);
+		/* 		background: hsl(212, 12%, 98%); */
+		filter: drop-shadow(0 0 10px #ffffff21);
+	}
+
+
+	/* selected message */
+	.zA.y0.x7,
+	.zA.zE.x7 {
+		background: #ffd8fe6b !important;
+	}
+
+	/* hide the gmail logo text */
+	.gb_je.gb_uc.gb_he {
+		clip-path: inset(0 4.5rem 0 0.9rem);
+		transition: all 0.3s 0.2s ease;
+	}
+
+	/* 	show gmail logo text on hover */
+	.gb_je.gb_uc.gb_he:hover {
+		clip-path: inset(0);
+	}
+
+
+	/* 	bottom info */
+	[role="contentinfo"] {
+		opacity: 0;
+		transform: translateY(12px);
+		transition: 0.2s all;
+	}
+	/*  bottom info hover */
+	[role="contentinfo"]:hover {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+
+	/*******************/
+	/* 	folding tabs */
+	/* 	 disable text highlight on category button click */
+	.Wr {
+		user-select: none;
+	}
+
+	/* 	fold icon */
+	.qi.Wp {
+		/* 		background-image: url(https://www.gstatic.com/images/icons/material/system_gm/2x/keyboard_arrow_down_black_20dp.png); */
+		background-image: url(https://www.gstatic.com/images/icons/material/system_gm/1x/keyboard_arrow_down_white_20dp.png);
+		transition: 0.3s all;
+		transform: rotate(-90deg);
+	}
+
+
+	/* expanded fold icon */
+	.Wq,
+	.Wq-A8 {
+		transform: scaleX(-1) !important;
+	}
+
+
+	/* animations */
+	@keyframes append-animate {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes append-opacity {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+
+	/* 	emails popup animation  */
+	.Cp > div,
+	.zw {
+		animation: append-animate 0.4s ease;
+		/* 		animation-delay: 0.4s; */
+	}
+
+	/* message info (numbers on the right side)	 */
+	.Di > .amH {
+		animation: append-opacity 0.4s ease;
+	}
+
+	/* hide the text in folded state */
+	.Wr > .Wn {
+		opacity: 0;
+		min-width: 0px;
+		max-width: 0px;
+		transition: 0.4s 0.2s all ease;
+	}
+
+	/* 	unfolded state text */
+	.Wr[aria-expanded=true] > .Wn,
+	.Wr:not([aria-expanded]) > .Wn {
+		opacity: 1;
+		max-width: 120px;
+	}
+
+
+
+	/* move fold icon to center */
+	.Wr:not([aria-expanded=true]) > .Wp {
+		margin-left: 0;
+	}
+
+	/*  right panel */
+	.nH.aUx {
+		width: 16px !important;
+	}
+
+	/*  hide right panel */
+	.bAw.it > * {
+		display: none;
+	}
+}
