@@ -86,7 +86,7 @@
 	}
 
 
-	/*******************/
+	/*****************/
 	/* 	folding tabs */
 	/* 	 disable text highlight on category button click */
 	.Wr {
@@ -130,12 +130,34 @@
 		}
 	}
 
+	@keyframes append-withSize {
+		from {
+			max-height: 0;
+			opacity: 0;
+		}
+		to {
+			max-height: 45px;
+			opacity: 1;
+		}
+	}
+
+	@keyframes append-width {
+		from {
+			transform: translateX(-12px);
+			opacity: 0;
+		}
+		to {
+
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+
 
 	/* 	emails popup animation  */
 	.Cp > div,
 	.zw {
 		animation: append-animate 0.4s ease;
-		/* 		animation-delay: 0.4s; */
 	}
 
 	/* message info (numbers on the right side)	 */
@@ -173,5 +195,125 @@
 	/*  hide right panel */
 	.bAw.it > * {
 		display: none;
+	}
+
+	/* 	fade in email */
+	.nH.if {
+		animation: append-opacity 1s ease;
+	}
+
+	/* no unread messages */
+	.aVj {
+		animation: append-withSize 0.4s ease;
+	}
+
+	/* 	remove 1px shadow for no reason */
+	.Wg {
+		box-shadow: none;
+	}
+
+	.qd {
+		border-bottom: none;
+	}
+
+	.wT > div:nth-child(3) > .n3 > .byl > .TK,
+	.byl.aJZ.a0L > .TK > .aim:not(:nth-child(1)){
+		animation: append-width .4s ease;
+	}
+
+	.CJ {
+		display: none;
+	}
+
+	.n6 > ::after,
+	.n6 > ::before {
+		transition: all 0.4s ease;
+	}
+
+	.n6 > ::after {
+		content: 'More';
+		left: 4rem;
+		position: absolute;
+	}
+
+	.n6 > .air::after {
+		left: 6rem;
+		opacity: 0;
+	}
+
+	.n6 > ::before {
+		content: 'Less';
+		left: 2rem;
+		position: absolute;
+		opacity: 0;
+	}
+
+	.n6 > .air::before {
+		left: 4rem;
+		opacity: 1;
+	}
+
+	.n6 .n4 .G-asx {
+		mask: url(https://www.gstatic.com/images/icons/material/system_gm/1x/expand_more_black_20dp.png) center/contain !important;
+		-webkit-mask: url(https://www.gstatic.com/images/icons/material/system_gm/1x/expand_more_black_20dp.png) center/contain !important;
+		transition: transform 0.3s;
+		transform: rotate(-90deg);
+	}
+
+	.n6 .air .G-asx {
+		transform: scaleX(-1);
+	}
+
+	/****************************/
+	/* 	animated menu hamburger */
+	/****************************/
+	
+	[aria-label="Main menu"] > svg > path {
+		display: none;
+	}
+
+	[aria-label="Main menu"] > svg,
+	[aria-label="Main menu"]::before,
+	[aria-label="Main menu"]::after {
+		background: #c0c0c0;
+		content: '';
+		display: block;
+		height: 2px;
+		position: absolute;
+		transition: background ease .2s, top ease .2s .2s, transform ease .2s;
+		width: 18px;
+	}
+
+	[aria-label="Main menu"] > svg {
+		left: 25px;
+		top: 31px;
+	}
+
+	[aria-label="Main menu"]::before {
+		left: 25px;
+		top: 26px;
+	}
+
+	[aria-label="Main menu"]::after {
+		left: 25px;
+		top: 36px;
+	}
+
+	[aria-label="Main menu"][aria-expanded="true"] > svg {
+		background: transparent;
+	}
+
+	[aria-label="Main menu"][aria-expanded="true"]::before {
+		transform: rotate(45deg);
+	}
+
+	[aria-label="Main menu"][aria-expanded="true"]::after {
+		transform: rotate(-45deg);
+	}
+
+	[aria-label="Main menu"][aria-expanded="true"]::before,
+	[aria-label="Main menu"][aria-expanded="true"]::after {
+		top: 31px;
+		transition: top ease .2s, transform ease .2s .2s;
 	}
 }
