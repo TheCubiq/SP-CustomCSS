@@ -36,13 +36,12 @@
 @var						checkbox anim-t "Enable tile animations" 1
 
 ==/UserStyle== */
-
 @-moz-document url-prefix("https://app.spline.design/files") {
   q(str) {
-  return s('%s', str)
-}
+    return s('%s', str);
+  }
 
-/* 	$filters= {
+  /* $filters= {
     clr: q(f-feature-c), 
     slc: q(f-feature-slc), 
     toggle: q(f-feature-t)
@@ -67,376 +66,283 @@
     slc: q(f-release-slc),
     toggle: q(f-release-t)
   } */
-
-
   /* filters are defined here */
- $filters = \
-            "fix"
-             ,
-            "help"
-            ,
-            "wip"
-            ,
-             "feature" 
-            ,
-            "release"
-            
+  $filters = 'fix', 'help', 'wip', 'feature', 'release';
+
   /* modifying the item order here changes the sort order */
   /* the last itemin this list will be shown on top of the projects hierarchy */
-  
-
-anim(data, state) {
-  if (anim-t) {
-    animation: data
-  } 
-  else {
-    display: state
-  }
-}
-
-// animations:
-
-@keyframes popin {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  80% {
-    opacity: 1;
-/* 			transform: scale(1.1); */
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes popout {
-  0% {
-    transform: scale(1);
-  }
-  80% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(0.8);
-    opacity: 0;
-    display: none;
-  }
-}	
-
-
-$activelist = (); 
-
-#root [class*="_selectoArea"] ul[class*='_grid_'] {
-
-/* 		> div:nth-child(2) > div { */
-    
-/* 			new project button */
-/* 			> div:nth-child(1) {
-      order: -69;
-    } */
-    
-
-/* 			rounded preview thumbnail */
-/* 			> div > :nth-child(1) {
-      border-radius: 1em;
-      overflow: hidden;
-    } */
-          
-          pointer-events: none;
-          
-          position: relative;
-          z-index: 0;
-
-
-    $clr = white;
-
-
-    for $k,$i in $filters {
-      
-      $f = {};
-      
-      /* todo: just a lil bit cleaner pls */
-      $f.slc =  q(lookup("f-" + $k + "-slc"));
-      $f.toggle = q(lookup("f-" + $k + "-t"));
-      $f.clr = q(lookup("f-" + $k + "-c"));				
-              
-              $attr = unquote("[alt*="+$f.slc+"]")
-              $slc_fld_ch = unquote("li:has("+$attr+")");
-              
-              > {$slc_fld_ch} {
-     
-                  
-        $clr = convert($f.clr);
-        
-        /* simple color check */
-        $clr = $clr is a 'rgba' ? $clr : white;
-
-/* 					div:nth-child(1)::after {
-          content: ".." + $i;
-          position: absolute;
-        } */
-
-
-        anim(popin 0.3s forwards cubic-bezier(0.34, 1.56, 0.64, 1), block)
-        
-        if (ftr-sort) {
-          order: ($i+1)*-1;
-        }
-        
-
-        if (( 
-            ftrMode == 1  && !convert($f.toggle) 
-          )||( 
-            ftrMode == 2 && convert($f.toggle) 
-          )) {
-            anim(popout 0.3s forwards, none)
-
-
-/* 						push($activelist, $k + ""+ $f.slc)	 */
-/* 						push($activelist, $f.slc)	 */
-/* 						push($activelist, ""+ $i +""+ $f.slc)	 */
-          push($activelist, unquote($k))	
-        }
-
-
-/* 					> :nth-child(2) {
-          color: lighten($clr, 50%);
-          text-shadow: 0 3px 8px #000;
-        }	 */
-                  
-                  > div {
-                      --color-main:$clr; 
-                      background: transparentify($clr, 10%);
-            box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
-                      
-                      &:hover {
-/*                             border: 1px solid lighten($clr, 50%); */
-                          background: transparentify($clr, 20%);
-                          box-shadow: inset 0px 0px 10px 1px transparentify($clr, 50%);
-                      }	
-                  }
-                  
-                  
-                  
-                  &:not(:nth-child(1 of {$slc_fld_ch})) {
-                      display: none;
-                      //position: absolute;
-                  }
-                  
-                  &:not(:nth-last-child(1 of {$slc_fld_ch})) {
-                      //display: none;
-                      //position: absolute;
-                  }
-                  
-                  div[class*="_imgWrapper"]{
-                      
-                      &::before {
-                          content: '';
-                          position: absolute;
-                          backdrop-filter: blur(4px) brightness(.3);
-                          inset: 0;
-                          z-index: 100;
-                      }
-                      &::after {
-                          content: '';
-                          position: absolute;
-                          background: $clr;
-                          
-                          margin-inline: auto;
-                          
-                          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' viewBox='0 0 24 24' aria-hidden='true'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z' fill='white'%3E%3C/path%3E%3C/svg%3E");
-                          mask-repeat: no-repeat;
-
-                          width: 5em;
-                          aspect-ratio: 1;
-                          
-                          top: 50%;
-                          transform: translateY(-50%);
-                          
-                          z-index: 100;
-                          
-                          pointer-events: all;
-                      }
-                  }
-                  
-                  div[class*="_subtitle_"] span {  
-                      display: inline-block;
-                      text-transform: lowercase;
-                      &::first-letter {
-                          text-transform: uppercase;
-                      }
-                      &::before{
-                          content: 'Last project '
-                      }
-                  }
-                  
-                  
-                  ^[0]:has(li:hover {$attr}) {
-                      
-                      *{ 
-                          pointer-events: all;
-                      }
-                      
-                      div[class*="_imgWrapper"]{
-                          &::after, &::before {
-                              opacity: 0;
-                          }
-                      }
-                      
-                      > :not({$slc_fld_ch}) {
-                          background: blue !important;
-                          display: none;
-                      }
-                      
-                      :nth-last-child(1 of {$slc_fld_ch}) {
-                          //background: #bada55 !important;
-                          
-                          //grid-column: span 1 / -1;
-                          
-                          &::after {
-                              //debug: "lastTest"
-                              content: '';
-                              position: absolute;
-                              
-                              inset: -1000%;
-                              top: 100%;
-                              
-                              //inset: calc(var(--space-4) * -1);
-                              //background: #1e00ff52;
-                              //backdrop-filter: blur(5px);
-                          }
-                      }
-                      
-                      
-                      {$slc_fld_ch} {
-                          z-index: 1;
-                          //debug: $f.slc;
-                          //background: red !important;
-                          
-                          display: block;
-                          //position: static;
-                          // margin-top: -50px;
-                          
-                          position: relative;
-                          
-                          //z-index: 10;
-                          
-                          &::before {
-                              //debug: "lastTest"
-                              content: '';
-                              z-index: -999;
-                              position: absolute;
-                              //inset: -1000%;
-                              inset: calc(var(--space-4) * -1);
-                              right: -1000%;
-                              //background: #ff000052;
-                              //backdrop-filter: blur(5px);
-                          }
-                      }
-                  }
-                  
-                  
-                  /*
-                  &:not(:nth-child(1 of {$slc_fld_ch})) {
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -50%) !important;
-                  */
-                      // opacity: var(--visibility) !important;
-                      
-                      
-                      
-/*                     background: $clr; */
-                     
-/*                     anim(popout 0.3s forwards, none) */
-              //}
-
-      }
-              
-              
-
-              
+  anim(data, state) {
+    if (anim-t) {
+      animation: data;
+    } else {
+      display: state;
     }
-          
-          /*
-          &::before {
-              content: '';
-              position: fixed;
-              inset: 0;
-              backdrop-filter: blur(5px);
+  }
+
+  // animations:
+  @keyframes popin {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    80% {
+      opacity: 1; /* transform: scale(1.1); */
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes popout {
+    0% {
+      transform: scale(1);
+    }
+
+    80% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(0.8);
+      opacity: 0;
+      display: none;
+    }
+  }
+
+  $activelist = ();
+
+  #root [class*="_selectoArea"] {
+    // background: blue;
+    ul[class*='_grid_'] {
+      /* > div:nth-child(2) > div { */
+      /* new project button */
+      /* > div:nth-child(1) {
+        order: -69;
+      } */
+      /* rounded preview thumbnail */
+      /* > div > :nth-child(1) {
+        border-radius: 1em;
+        overflow: hidden;
+      } */
+      pointer-events: none;
+      position: relative;
+      z-index: 0;
+      $clr = white;
+
+      for $k, $i in $filters {
+        $f = {};
+        /* todo: just a lil bit cleaner pls */
+        $f.slc = q(lookup('f-' + $k + '-slc'));
+        $f.toggle = q(lookup('f-' + $k + '-t'));
+        $f.clr = q(lookup('f-' + $k + '-c'));
+        $attr = unquote('[alt*=' + $f.slc + ']');
+        $slc_fld_ch = unquote('li:has(' + $attr + ')');
+
+        > {$slc_fld_ch} {
+          $clr = convert($f.clr);
+          /* simple color check */
+          $clr = $clr is a 'rgba' ? $clr : white;
+          anim(popin 0.3s forwards cubic-bezier(0.34, 1.56, 0.64, 1), block);
+
+          if (ftr-sort) {
+            order: ($i + 1) * -1;
           }
+
+          if ((ftrMode == 1 && !convert($f.toggle)) || (ftrMode == 2 && convert($f.toggle))) {
+            anim(popout 0.3s forwards, none);
+            /* push($activelist, $k + ""+ $f.slc) */
+            /* push($activelist, $f.slc) */
+            /* push($activelist, ""+ $i +""+ $f.slc) */
+            push($activelist, unquote($k));
+          }
+
+          > div {
+            --color-main: $clr;
+            background: transparentify($clr, 10%);
+            box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
+
+            &:hover {
+              /* border: 1px solid lighten($clr, 50%); */
+              background: transparentify($clr, 20%);
+              box-shadow: inset 0px 0px 10px 1px transparentify($clr, 50%);
+            }
+          }
+
+          &:not(:nth-child(1 of {$slc_fld_ch})) {
+            display: none;
+            // position: absolute;
+          }
+
+          // &:not(:nth-last-child(1 of {$slc_fld_ch})) {
+          // // display: none;
+          // // position: absolute;
+          // }
+          div[class*='_imgWrapper'] {
+            &::before {
+              content: '';
+              position: absolute;
+              backdrop-filter: blur(4px) brightness(0.3);
+              inset: 0;
+              z-index: 100;
+            }
+
+            &::after {
+              content: '';
+              position: absolute;
+              background: $clr;
+              margin-inline: auto;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' viewBox='0 0 24 24' aria-hidden='true'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z' fill='white'%3E%3C/path%3E%3C/svg%3E");
+              mask-repeat: no-repeat;
+              width: 5em;
+              aspect-ratio: 1;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 100;
+            }
+
+            ^[-3]:active [class*='_imgWrapper']::after {
+              pointer-events: all;
+            }
+          }
+
+          div[class*='_subtitle_'] span {
+            display: inline-block;
+            text-transform: lowercase;
+
+            &::first-letter {
+              text-transform: uppercase;
+            }
+
+            &::before {
+              content: 'Last project ';
+            }
+          }
+
+          ^[-1]:has(li:hover {$attr}) {
+            * {
+              pointer-events: all;
+            }
+
+            div[class*='_imgWrapper'] {
+              &::after, &::before {
+                opacity: 0;
+              }
+            }
+
+            > :not({$slc_fld_ch}) {
+              // background: blue !important;
+              display: none;
+            }
+
+            :nth-last-child(1 of {$slc_fld_ch}) {
+              // background: #bada55 !important;
+
+              // grid-column: span 1 / -1;
+              &::after {
+                // debug: "lastTest"
+                content: '';
+                position: absolute;
+                inset: -1000%;
+                top: 100%;
+              }
+            }
+
+            {$slc_fld_ch} {
+              z-index: 1;
+              // debug: $f.slc;
+              // background: red !important;
+              display: block;
+              // position: static;
+              // margin-top: -50px;
+              position: relative;
+
+              // z-index: 10;
+              &::before {
+                // debug: "lastTest"
+                content: '';
+                z-index: -999;
+                position: absolute;
+                // inset: -1000%;
+                inset: calc(var(--space-4) * -1);
+                right: -1000%;
+                // background: #ff000052;
+                // backdrop-filter: blur(5px);
+              }
+            }
+          }
+
+          /*
+          &:not(:nth-child(1 of {$slc_fld_ch})) {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%) !important;
           */
-          
-          
+          /* background: $clr; */
+          /* anim(popout 0.3s forwards, none) */
+        }
+      }
 
-    > li {
-              anim(popin 0.3s forwards, block);
+      /*
+      &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          backdrop-filter: blur(5px);
+      }
+      */
+      > li {
+        anim(popin 0.3s forwards, block);
 
-              if ((
-                  ftrMode == 1 && f-others-t == 0
-              )||(
-                  ftrMode == 2 && f-others-t == 1
-              )) { 
-                  push($activelist, unquote("others"))	
-                  anim(popout 0.3s forwards, none)
-              }
+        if ((ftrMode == 1 && (f-others-t == 0)) || (ftrMode == 2 && (f-others-t == 1))) {
+          push($activelist, unquote('others'));
+          anim(popout 0.3s forwards, none);
+        }
 
-              > div {
-                transition: 0.3s !important;
-                padding: 1em;
-                border-radius: var(--radius-3);
-              }
+        > div {
+          transition: 0.3s !important;
+          padding: 1em;
+          border-radius: var(--radius-3);
+        }
+      }
     }
   }
-  
 
   if (length($activelist) > 0) {
-    $info-s-hidden = "";
-/* 			$info-s-hidden += " >>> " */
-/* 			$info-s-hidden = replace(" ", "   ", $info-s-hidden) */
-    $info-s-hidden += \
-        join(", ", 
-          split(" ", 
-            replace("'", "", 
-              q($activelist)
-            )
-          )
-        )
+    $info-s-hidden = '';
+    /* $info-s-hidden += " >>> " */
+    /* $info-s-hidden = replace(" ", "   ", $info-s-hidden) */
+    $info-s-hidden += join(', ', split(' ', replace("'", '', q($activelist))));
 
-    
-    
-    > div:nth-child(1) > div:nth-child(2){
-      
+    > div:nth-child(1) > div:nth-child(2) {
       &::before, &::after {
-          opacity: 0.5;
-          transition: opacity 0.2s, clip-path 0.5s 0s;
-          transition-timing-function: ease-in-out;
+        opacity: 0.5;
+        transition: opacity 0.2s, clip-path 0.5s 0s;
+        transition-timing-function: ease-in-out;
       }
-      
+
       &::before {
-          content: "" + s("🧹(%s)", (length($activelist)));
+        content: '' + s('🧹(%s)', length($activelist));
       }
-      
+
       &::after {
-        
-          
-          
-          if (length($activelist) == (length($filters) + 1)) {
-            $info-s-hidden = "everything is hidden ";
-            color: violet;
-            clip-path: inset(0 0 0 0); 
-          }else {
-            clip-path: inset(0 100% 0 0); 
-          }
-          content: " " + $info-s-hidden;
+        if (length($activelist) == (length($filters) + 1)) {
+          $info-s-hidden = 'everything is hidden ';
+          color: violet;
+          clip-path: inset(0 0 0 0);
+        } else {
+          clip-path: inset(0 100% 0 0);
+        }
+
+        content: ' ' + $info-s-hidden;
       }
-      
-      &:hover::after,
-       &:hover::before{
-          opacity: 1
-          clip-path: inset(0 0 0 0); 
+
+      &:hover::after, &:hover::before {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
       }
     }
   }
