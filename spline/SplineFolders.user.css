@@ -34,39 +34,13 @@
 
 @var						checkbox f-others-t "--- Others ---" 1
 @var						checkbox anim-t "Enable tile animations" 1
-@var						checkbox folders-t "Show Folders 🧪" 1
+@var						checkbox folders-t "Show Folders 🧪" 0
 
 ==/UserStyle== */
 @-moz-document url-prefix("https://app.spline.design/files") {
   q(str) {
     return s('%s', str);
   }
-
-  /* $filters= {
-    clr: q(f-feature-c), 
-    slc: q(f-feature-slc), 
-    toggle: q(f-feature-t)
-  },
-  {
-    clr: q(f-fix-c), 		
-    slc: q(f-fix-slc), 		 
-    toggle: q(f-fix-t)
-  }, 
-  {
-    clr: q(f-help-c), 		
-    slc: q(f-help-slc), 	 
-    toggle: q(f-help-t)
-  }, 
-  {
-    clr: q(f-wip-c)), 		
-    slc: q(f-wip-slc), 		 
-    toggle: q(f-wip-t)
-  }, 
-  {
-    clr: q(f-release-c), 
-    slc: q(f-release-slc),
-    toggle: q(f-release-t)
-  } */
   /* filters are defined here */
   $filters = 'fix', 'help', 'wip', 'feature', 'release';
 
@@ -115,42 +89,40 @@
 
   $activelist = ();
 
+  // we will use selectoArea later in the code..
   #root [class*="_selectoArea"] {
-    // background: blue;
+    // the main grid selector
     ul[class*='_grid_'] {
-      /* > div:nth-child(2) > div { */
-      /* new project button */
-      /* > div:nth-child(1) {
-        order: -69;
-      } */
-      /* rounded preview thumbnail */
-      /* > div > :nth-child(1) {
-        border-radius: 1em;
-        overflow: hidden;
-      } */
+      // The folder system works by checking
+      // the :hover property on the grid's items.
       if (folders-t) {
         pointer-events: none;
       }
 
-      position: relative;
-      z-index: 0;
       $clr = white;
 
       for $k, $i in $filters {
         $f = {};
-        /* todo: just a lil bit cleaner pls */
+        // raw filter that triggers folder
         $f.slc = q(lookup('f-' + $k + '-slc'));
+        // state of the filter (bool)
         $f.toggle = q(lookup('f-' + $k + '-t'));
+        // color of the folder/section
         $f.clr = q(lookup('f-' + $k + '-c'));
+        // raw attribute that triggers the folder
+        // spline sets thumbnail img alt attribute
         $attr = unquote('[alt*=' + $f.slc + ']');
+        // to the name of the project
         $slc_fld_ch = unquote('li:has(' + $attr + ')');
 
+        // grid > filtered list item
         > {$slc_fld_ch} {
           $clr = convert($f.clr);
-          /* simple color check */
+          /* simple color check/fallback */
           $clr = $clr is a 'rgba' ? $clr : white;
           anim(popin 0.3s forwards cubic-bezier(0.34, 1.56, 0.64, 1), block);
 
+          // for sorting by category
           if (ftr-sort) {
             order: ($i + 1) * -1;
           }
@@ -158,9 +130,13 @@
           if ((ftrMode == 1 && !convert($f.toggle)) || (ftrMode == 2 && convert($f.toggle))) {
             anim(popout 0.3s forwards, none);
             push($activelist, unquote($k));
+            // selector for the main list item.
+            // (ch for child)
           }
 
+          // simple category styling
           > div {
+            // highlight (this variable is part of the spline code)
             --color-main: $clr;
             background: transparentify($clr, 10%);
             box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
@@ -171,49 +147,61 @@
             }
           }
 
+          // tint opacity for the thumbnail of selected(clicked) project
           [class*='_imgWrapper'] {
             &::after {
               opacity: 0.1;
             }
           }
 
+          // experimental - folder related stuff.
           if (folders-t) {
+            // show just one item per category (folder)
+            // hide all the other cat items.
             &:not(:nth-child(1 of {$slc_fld_ch})) {
               display: none;
             }
 
             div[class*='_imgWrapper'] {
+              // bluring the thumbnail
               &::before {
                 content: '';
                 position: absolute;
                 backdrop-filter: blur(4px) brightness(0.6);
                 inset: 0;
-                z-index: 100;
-                background: #00000001; // fixes weird blur
+                z-index: 99;
+                background: #00000001; // fixes filter not applying bug
               }
 
+              // folder icon
               &::after {
                 content: '';
                 position: absolute;
+                // img centering
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                // color
                 background: lighten($clr, 20%);
-                margin-inline: auto;
+                // folder icon
                 mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' viewBox='0 0 24 24' aria-hidden='true'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z' fill='white'%3E%3C/path%3E%3C/svg%3E");
                 mask-repeat: no-repeat;
                 width: 5em;
                 aspect-ratio: 1;
-                top: 50%;
-                transform: translateY(-50%);
                 z-index: 100;
                 opacity: 1;
               }
 
-              filter: contrast(); // makes stuff working xd
-
+              // click detector
+              // [class*="_selectoArea"] (3 levels up)
+              // when clicked and hovering over the folder icon
+              // this triggers the folder opening
               ^[-3]:active [class*='_imgWrapper']::after {
                 pointer-events: all;
               }
             }
 
+            // folder category name (instead of project name)
             div[class*='_title_'] {
               flex-direction: column;
               align-items: flex-start;
@@ -226,15 +214,22 @@
                 display: block;
               }
 
+              // hide the project name
               span {
                 display: none;
               }
             }
 
+            // folder description
+            // changing "Edited xxx ago" to
+            // "Last project edited xxx ago"
             div[class*='_subtitle_'] span {
+              // for the first-letter selector
               display: inline-block;
+              // tiny detail, lowercase E in the word "Edited"
               text-transform: lowercase;
 
+              // tiny detail, capitalized "L" in "last project"
               &::first-letter {
                 text-transform: uppercase;
               }
@@ -244,8 +239,12 @@
               }
             }
 
+            // category label / button
+            // grid::before
             ^[-1]::before {
+              // first in the list
               order: -69;
+              // full width
               grid-column: 1 / -1;
               height: 3em;
               z-index: 99999;
@@ -255,11 +254,14 @@
               box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
               font-size: 3em;
               border-radius: var(--radius-3);
+              // centering text
               display: grid;
               place-items: center;
             }
 
+            // Opened folder handling
             ^[-1]:has(li:hover {$attr}) {
+              // Big "Back Button" button on top
               &::before {
                 background: transparentify($clr, 10%);
                 box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
@@ -269,60 +271,59 @@
                 z-index: 99;
               }
 
+              // so that we make sure to keep
+              // the hovering state active
               * {
                 pointer-events: all;
               }
 
+              // show the project name again
               div[class*='_title_'] {
                 span {
                   display: block;
                 }
 
+                // the category label
                 &::before {
                   opacity: 0.5;
                 }
               }
 
+              // hide the folder icon and thumbnail blur
               div[class*='_imgWrapper'] {
                 &::after, &::before {
                   opacity: 0;
                 }
               }
 
+              // hide all the other projects but the category
               > :not({$slc_fld_ch}) {
-                // background: blue !important;
                 display: none;
               }
 
-              :nth-last-child(1 of {$slc_fld_ch}) {
-                // background: #bada55 !important;
+              // "HoverZones" to keep the hovering state
 
-                // grid-column: span 1 / -1;
+              // 1. HoverZone | last project
+              :nth-last-child(1 of {$slc_fld_ch}) {
                 &::after {
-                  // debug: "lastTest"
                   content: '';
                   position: absolute;
                   inset: -1000%;
+                  // start at the bottom of the last project
                   top: 100%;
                   cursor: none;
-                  // background: blue;
+                  // see the hoverzone :)
+                  // background: #0000ff69;
                 }
               }
 
               {$slc_fld_ch} {
+                // tiny styling for projects in the folder
                 cursor: pointer;
-                // z-index: 1;
-                // debug: $f.slc;
-                // background: red !important;
                 display: block;
 
-                // position: static;
-                // margin-top: -50px;
-                // position: relative;
-
-                // z-index: 10;
+                // 2. HoverZone | around projects
                 &::before {
-                  // debug: "lastTest"
                   content: '';
                   z-index: -999;
                   position: absolute;
@@ -330,12 +331,17 @@
                   inset: calc(var(--space-4) * -1);
                   right: -1000%;
                   cursor: none;
+                  // see the hoverzone :)
                   // background: #ff000052;
-                  // backdrop-filter: blur(5px);
                 }
               }
 
+              // go back button handling
+              // for the first project
               :nth-child(1 of {$slc_fld_ch}) {
+                // disable this when clicked
+                // enable the 2. hoverzone color
+                // and see what happens if you click.
                 :not(:active) &::before {
                   top: -1000%;
                   cursor: pointer;
@@ -346,22 +352,18 @@
         }
       }
 
-      /*
-      &::before {
-          content: '';
-          position: fixed;
-          inset: 0;
-          backdrop-filter: blur(5px);
-      }
-      */
+      // for any project
+      // the others as well.
       > li {
         anim(popin 0.3s forwards, block);
 
+        // hide or show based on the filter
         if ((ftrMode == 1 && (f-others-t == 0)) || (ftrMode == 2 && (f-others-t == 1))) {
           push($activelist, unquote('others'));
           anim(popout 0.3s forwards, none);
         }
 
+        // just tiny container styling
         > div {
           transition: 0.3s !important;
           padding: 1em;
@@ -371,6 +373,14 @@
     }
   }
 
+  // blurred project header
+  #filesLayout > [class*='_header_'] {
+    background: transparent;
+    backdrop-filter: blur(14px);
+    z-index: 999999; // very high 🤯
+  }
+
+  // active list
   if (length($activelist) > 0) {
     $info-s-hidden = '';
     /* $info-s-hidden += " >>> " */
