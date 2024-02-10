@@ -34,6 +34,7 @@
 
 @var						checkbox f-others-t "--- Others ---" 1
 @var						checkbox anim-t "Enable tile animations" 1
+@var						checkbox folders-t "Show Folders 🧪" 1
 
 ==/UserStyle== */
 @-moz-document url-prefix("https://app.spline.design/files") {
@@ -127,7 +128,10 @@
         border-radius: 1em;
         overflow: hidden;
       } */
-      pointer-events: none;
+      if (folders-t) {
+        pointer-events: none;
+      }
+
       position: relative;
       z-index: 0;
       $clr = white;
@@ -153,9 +157,6 @@
 
           if ((ftrMode == 1 && !convert($f.toggle)) || (ftrMode == 2 && convert($f.toggle))) {
             anim(popout 0.3s forwards, none);
-            /* push($activelist, $k + ""+ $f.slc) */
-            /* push($activelist, $f.slc) */
-            /* push($activelist, ""+ $i +""+ $f.slc) */
             push($activelist, unquote($k));
           }
 
@@ -165,124 +166,183 @@
             box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
 
             &:hover {
-              /* border: 1px solid lighten($clr, 50%); */
               background: transparentify($clr, 20%);
               box-shadow: inset 0px 0px 10px 1px transparentify($clr, 50%);
             }
           }
 
-          &:not(:nth-child(1 of {$slc_fld_ch})) {
-            display: none;
-            // position: absolute;
-          }
-
-          // &:not(:nth-last-child(1 of {$slc_fld_ch})) {
-          // // display: none;
-          // // position: absolute;
-          // }
-          div[class*='_imgWrapper'] {
-            &::before {
-              content: '';
-              position: absolute;
-              backdrop-filter: blur(4px) brightness(0.3);
-              inset: 0;
-              z-index: 100;
-            }
-
+          [class*='_imgWrapper'] {
             &::after {
-              content: '';
-              position: absolute;
-              background: $clr;
-              margin-inline: auto;
-              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' viewBox='0 0 24 24' aria-hidden='true'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z' fill='white'%3E%3C/path%3E%3C/svg%3E");
-              mask-repeat: no-repeat;
-              width: 5em;
-              aspect-ratio: 1;
-              top: 50%;
-              transform: translateY(-50%);
-              z-index: 100;
-            }
-
-            ^[-3]:active [class*='_imgWrapper']::after {
-              pointer-events: all;
+              opacity: 0.1;
             }
           }
 
-          div[class*='_subtitle_'] span {
-            display: inline-block;
-            text-transform: lowercase;
-
-            &::first-letter {
-              text-transform: uppercase;
-            }
-
-            &::before {
-              content: 'Last project ';
-            }
-          }
-
-          ^[-1]:has(li:hover {$attr}) {
-            * {
-              pointer-events: all;
-            }
-
-            div[class*='_imgWrapper'] {
-              &::after, &::before {
-                opacity: 0;
-              }
-            }
-
-            > :not({$slc_fld_ch}) {
-              // background: blue !important;
+          if (folders-t) {
+            &:not(:nth-child(1 of {$slc_fld_ch})) {
               display: none;
             }
 
-            :nth-last-child(1 of {$slc_fld_ch}) {
-              // background: #bada55 !important;
-
-              // grid-column: span 1 / -1;
-              &::after {
-                // debug: "lastTest"
+            div[class*='_imgWrapper'] {
+              &::before {
                 content: '';
                 position: absolute;
-                inset: -1000%;
-                top: 100%;
+                backdrop-filter: blur(4px) brightness(0.6);
+                inset: 0;
+                z-index: 100;
+                background: #00000001; // fixes weird blur
+              }
+
+              &::after {
+                content: '';
+                position: absolute;
+                background: lighten($clr, 20%);
+                margin-inline: auto;
+                mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' focusable='false' viewBox='0 0 24 24' aria-hidden='true'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z' fill='white'%3E%3C/path%3E%3C/svg%3E");
+                mask-repeat: no-repeat;
+                width: 5em;
+                aspect-ratio: 1;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 100;
+                opacity: 1;
+              }
+
+              filter: contrast(); // makes stuff working xd
+
+              ^[-3]:active [class*='_imgWrapper']::after {
+                pointer-events: all;
               }
             }
 
-            {$slc_fld_ch} {
-              z-index: 1;
-              // debug: $f.slc;
-              // background: red !important;
-              display: block;
-              // position: static;
-              // margin-top: -50px;
-              position: relative;
+            div[class*='_title_'] {
+              flex-direction: column;
+              align-items: flex-start;
 
-              // z-index: 10;
               &::before {
-                // debug: "lastTest"
-                content: '';
-                z-index: -999;
-                position: absolute;
-                // inset: -1000%;
-                inset: calc(var(--space-4) * -1);
-                right: -1000%;
-                // background: #ff000052;
-                // backdrop-filter: blur(5px);
+                content: '| ' $k ' |';
+                // color: $clr;
+                text-transform: capitalize;
+                margin-inline-end: 0.3em;
+                display: block;
+              }
+
+              span {
+                display: none;
+              }
+            }
+
+            div[class*='_subtitle_'] span {
+              display: inline-block;
+              text-transform: lowercase;
+
+              &::first-letter {
+                text-transform: uppercase;
+              }
+
+              &::before {
+                content: 'Last project ';
+              }
+            }
+
+            ^[-1]::before {
+              order: -69;
+              grid-column: 1 / -1;
+              height: 3em;
+              z-index: 99999;
+              content: 'Projects';
+              $clr = #e6e6e6;
+              background: transparentify($clr, 10%);
+              box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
+              font-size: 3em;
+              border-radius: var(--radius-3);
+              display: grid;
+              place-items: center;
+            }
+
+            ^[-1]:has(li:hover {$attr}) {
+              &::before {
+                background: transparentify($clr, 10%);
+                box-shadow: inset 0px 0px 5px 0px transparentify($clr, 50%);
+                text-transform: capitalize;
+                content: '⬆ | ' $k;
+                // background: #514891;
+                z-index: 99;
+              }
+
+              * {
+                pointer-events: all;
+              }
+
+              div[class*='_title_'] {
+                span {
+                  display: block;
+                }
+
+                &::before {
+                  opacity: 0.5;
+                }
+              }
+
+              div[class*='_imgWrapper'] {
+                &::after, &::before {
+                  opacity: 0;
+                }
+              }
+
+              > :not({$slc_fld_ch}) {
+                // background: blue !important;
+                display: none;
+              }
+
+              :nth-last-child(1 of {$slc_fld_ch}) {
+                // background: #bada55 !important;
+
+                // grid-column: span 1 / -1;
+                &::after {
+                  // debug: "lastTest"
+                  content: '';
+                  position: absolute;
+                  inset: -1000%;
+                  top: 100%;
+                  cursor: none;
+                  // background: blue;
+                }
+              }
+
+              {$slc_fld_ch} {
+                cursor: pointer;
+                // z-index: 1;
+                // debug: $f.slc;
+                // background: red !important;
+                display: block;
+
+                // position: static;
+                // margin-top: -50px;
+                // position: relative;
+
+                // z-index: 10;
+                &::before {
+                  // debug: "lastTest"
+                  content: '';
+                  z-index: -999;
+                  position: absolute;
+                  // inset: -1000%;
+                  inset: calc(var(--space-4) * -1);
+                  right: -1000%;
+                  cursor: none;
+                  // background: #ff000052;
+                  // backdrop-filter: blur(5px);
+                }
+              }
+
+              :nth-child(1 of {$slc_fld_ch}) {
+                :not(:active) &::before {
+                  top: -1000%;
+                  cursor: pointer;
+                }
               }
             }
           }
-
-          /*
-          &:not(:nth-child(1 of {$slc_fld_ch})) {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) !important;
-          */
-          /* background: $clr; */
-          /* anim(popout 0.3s forwards, none) */
         }
       }
 
