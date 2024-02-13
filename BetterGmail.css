@@ -25,14 +25,14 @@
 	}
 
 	/* 	search in mail */
-	.gb_Kd.gb_Ud.gb_Ne.gb_Ce {
+	header[role="banner"] > div:nth-child(2) > div:nth-child(2) {
 		opacity: 0;
 		transform: translateY(-12px);
 		transition: 0.2s all;
 	}
 
 	/* 	search in mail hover */
-	.gb_Kd.gb_Ud.gb_Ne.gb_Ce:hover {
+	header[role="banner"]> div:nth-child(2) > div:nth-child(2):hover {
 		opacity: 1;
 		transform: translateY(0);
 	}
@@ -62,13 +62,13 @@
 	}
 
 	/* hide the gmail logo text */
-	.gb_je.gb_uc.gb_he {
+	a[aria-label="Gmail"] {
 		clip-path: inset(0 4.5rem 0 0.9rem);
-		transition: all 0.3s 0.2s ease;
+		transition: all 0.2s 0.2s ease;
 	}
 
 	/* 	show gmail logo text on hover */
-	.gb_je.gb_uc.gb_he:hover {
+	a[aria-label="Gmail"]:hover {
 		clip-path: inset(0);
 	}
 
@@ -198,7 +198,7 @@
 	}
 
 	/* 	fade in email */
-	.nH.if {
+	.nH[role="main"] > div {
 		animation: append-opacity 1s ease;
 	}
 
@@ -315,5 +315,10 @@
 	[aria-label="Main menu"][aria-expanded="true"]::after {
 		top: 31px;
 		transition: top ease .2s, transform ease .2s .2s;
+	}
+	
+	/* 	remove running out of storage warning */
+	.GR[aria-label="Inbox tip"] {
+		display: none;
 	}
 }
