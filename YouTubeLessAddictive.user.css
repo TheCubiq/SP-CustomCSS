@@ -1,0 +1,255 @@
+/* ==UserStyle==
+@name           YouTube | LessAddictive | by Cubiq 
+@namespace      github.com/openstyles/stylus
+@version        1.0.0
+@description    Search for what you actually want to search for <3 
+@author         CubiqTheCreator
+@preprocessor 	stylus
+==/UserStyle== */
+@-moz-document url("https://www.youtube.com/"),
+url("https://www.youtube.com/?app=desktop") {
+
+
+	accent-color=rgb(255, 0, 0);
+
+	tp-yt-app-drawer#guide,
+	/* 		ytd-mini-guide-renderer.style-scope.ytd-app, */
+	ytd-page-manager#page-manager {
+		display: none !important;
+	}
+
+	div#container {
+		transition: all 0.3s 0.05s ease-in-out;
+	}
+
+	#search-icon.ytd-searchbox {
+		display: inline-flex;
+		opacity: 0;
+		width: 20px;
+		height: 20px;
+		transition: all 0.3s ease-in-out;
+	}
+
+	ytd-searchbox[has-focus] #search-icon.ytd-searchbox {
+		opacity: 1;
+	}
+
+	html .sbsb_d {
+		background: transparent !important;
+	}
+
+	#masthead-container.ytd-app {
+		top: unset !important;
+		top: 50vh !important;
+		/* 		bottom: 50vh !important; */
+		z-index: 9999 !important;
+		animation: whaspopin 1s 0.5s backwards;
+	}
+
+	div#background {
+		background: transparent !important;
+	}
+
+	div#end,
+	div#start {
+		transform: translateY(calc(-50vh));
+	}
+
+	div#center {
+		transform: translateY(-50%) scale(1.5);
+	}
+
+	tp-yt-iron-dropdown.style-scope.ytd-popup-container {
+		z-index: 99999999 !important;
+	}
+
+
+	body {
+		overflow-y: hidden !important;
+	}
+
+	.gsfs {
+		font-size: 1.6rem;
+		color: #ffffffb8;
+	}
+
+	.sbsb_a {
+		background: alpha(black, 92%) !important;
+	}
+
+	.sbsb_c {
+		opacity: 0.8;
+		transition: all 0.6s ease-in-out;
+	}
+	.sbpqs_a {
+		color: white;
+	}
+
+	.sbpqs_a:before {
+		filter: invert(1);
+	}
+
+	.fr.sbpqs_b a {
+		color: white;
+		opacity: 0.6;
+	}
+
+	.sbsb_d {
+		opacity: 1;
+		/* 		background: rgb(100, 0, 0); */
+		background: transparent;
+		color: #fff;
+		/* 		transform: perspective(400px) rotateY(-30deg); */
+		/* 		letter-spacing: -1px; */
+		text-shadow: #fff 1px 0 10px;
+		/* 		box-shadow: rgb(255 0 0 / 57%) 0px 0px 7px 2px, inset rgb(255 0 0 / 57%) 0px 0px 6px 3px; */
+		border-radius: 69em;
+		transition: all 0s;
+		cursor: pointer;
+	}
+	.sbdd_b {
+		background: accent-color !important;
+		border-color: @background !important;
+		/* 		box-shadow: rgba(255, 0, 0, .63) 0px 7px 29px 0px; */
+		box-shadow: alpha(accent-color, 63%) 0px 0px 9px 3px;
+	}
+
+	.gstl_50.sbdd_a {
+		display: block !important;
+		transition: opacity 0.2s ease-in-out;
+	}
+
+	.gstl_50.sbdd_a[style*="display: none"] {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	ytd-searchbox[has-focus] #container.ytd-searchbox {
+		border: accent-color solid 1px;
+		/* 		box-shadow: rgba(255, 0, 0, .63) 0px 7px 29px 0px; */
+		box-shadow: alpha(accent-color, 63%) 0px 0px 7px 1px;
+	}
+
+
+	ytd-mini-guide-renderer {
+		background: transparent;
+		opacity: 1;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+
+	ytd-mini-guide-renderer[hidden] {
+		display: block !important;
+		opacity: 0;
+		user-select: none;
+		transform: translateX(-70px);
+	}
+
+
+	ytd-mini-guide-renderer[hidden] #endpoint {
+		cursor: default !important;
+	}
+
+	yt-icon-button#guide-button {
+		transition: all 0.2s ease-in-out;
+	}
+
+	@media(max-width:1312px) {
+		yt-icon-button#guide-button {
+			margin-right: -48px !important;
+			opacity: 0;
+		}
+	}
+}
+
+
+
+
+@-moz-document regexp("https:\\/\\/www\\.youtube\\.com\\/(?!e)[\\w\\/?=]*") {
+	/* anywhere else on yt 
+    not triggering the /embed      */
+	@keyframes whaspopin {
+		from {
+			opacity: 0
+		}
+		to {
+			opacity: 1
+		}
+	}
+
+	@keyframes whaspopulse {
+		0% {
+			opacity: 1
+		}
+		50% {
+			opacity: 0
+		}
+		100% {
+			opacity: 1
+		}
+	}
+
+	@keyframes whaspopout {
+		from {
+			opacity: 1
+		}
+		to {
+			opacity: 0
+		}
+	}
+
+	yt-page-navigation-progress {
+		z-index: 99999999 !important;
+		bottom: 0;
+		opacity: 1;
+		height: unset;
+		background: var(--yt-spec-base-background);
+		transition: opacity 0.4s ease-in-out;
+	}
+
+	#masthead-skeleton-icons,
+	div#home-page-skeleton,
+	.ghost-card {
+		display: none !important;
+	}
+
+	div#progress {
+		/* 		display: none; */
+		background accent-color !important;
+		box-shadow: alpha(accent-color, 69%) 0 0 20px 5px;
+	}
+
+	yt-page-navigation-progress[hidden] {
+		display: block !important;
+		position: absolute;
+		opacity: 0;
+	}
+
+	body[dir="ltr"]::after,
+	yt-page-navigation-progress::after {
+		pointer-events: none;
+		position: absolute;
+		/* bottom: 50%; */
+		/* right: 50%; */
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		line-height: 25;
+		transform: scale(0.3);
+		font-size: 5em;
+		color: alpha(white, 50%);
+		content: "by cubiq 🤍";
+		/* background-color: red; */
+		background-image: url("https://www.logo.wine/a/logo/YouTube/YouTube-White-Full-Color-Logo.wine.svg");
+		background-size: 100% 100%;
+	}
+
+
+	body[dir="ltr"]:not([rounded-container])::after {
+		animation: whaspopin 0.4s forwards;
+	}
+
+	body[rounded-container]::after {
+		animation: whaspopout 0.4s forwards;
+	}
+}
