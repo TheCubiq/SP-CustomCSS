@@ -87,12 +87,38 @@
       display: none;
     }
   }
+  
+  // functional keyframes
+  
+  // folder opening (mouse-up)
+  @keyframes click {
+    to {
+      pointer-events: all;
+    }
+  }
+  
+  
+  // load styles safely
+  @keyframes start-disable {
+    from {
+      --pointer-events: none;
+    }
+    to {
+      --pointer-events: all;
+    }
+  }
+  
+  :root {
+    --pointer-events: none;
+  }
 
   $activelist = ();
 
   // some focus stuff needs to have the reference
   // of the body parent selector.
   body {
+    // bug-fix: disable opening folder on start
+    animation: start-disable 1s forwards !important;
     // we will use selectoArea later in the code..
     [class*="_selectoArea"] {
       // weird scrolling overflowing (probably my hoverzones)
@@ -210,6 +236,7 @@
                   aspect-ratio: 1;
                   z-index: 100;
                   opacity: 1;
+                  transition: opacity .3s !important;
                 }
 
                 // click detector
@@ -217,7 +244,13 @@
                 // when clicked and hovering over the folder icon
                 // this triggers the folder opening
                 ^[-3]:active [class*='_imgWrapper']::after {
-                  pointer-events: all;
+                    opacity: .5 !important;
+
+                    // trigger folder opening on mouse-up
+                    // by setting this directly to pointer-events: all
+                    // the folder would open on mouse-down 
+                    // which is relatively unsatisfying
+                    animation: click 1ms forwards !important; 
                 }
               }
 
@@ -310,7 +343,7 @@
                 // so that we make sure to keep
                 // the hovering state active
                 * {
-                  pointer-events: all;
+                    pointer-events: var(--pointer-events);
                 }
 
                 // show the remixed tag
@@ -334,6 +367,7 @@
                 div[class*='_imgWrapper'] {
                   &::after, &::before {
                     opacity: 0;
+                    visibility: hidden;
                   }
                 }
 
