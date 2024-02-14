@@ -1,0 +1,35 @@
+/* ==UserStyle==
+@name           Better Image Viewer
+@namespace      github.com/TheCubiq
+@version        1.0.0
+@description    Add nice little blurred background to image previews
+@author         Cubiq
+@preprocessor   stylus
+
+==/UserStyle== */
+@-moz-document regexp(".*.(png|jpg|gif|webp|svg)*") {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    /* 
+      cool little bug to get the bg url
+      probs works only on chromium based browsers but idc
+    */
+    background-image: url(" ");
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+    --filter: blur(1vh) brightness(.7);
+    filter: var(--filter);
+    -webkit-filter: var(--filter);
+  }
+
+  img {
+    isolation: isolate;
+    z-index: 1;
+    filter: drop-shadow(0px 1px 2rem #0008);
+    position: relative;
+    background-color: transparent !important;
+  }
+}
