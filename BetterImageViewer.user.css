@@ -7,7 +7,7 @@
 @preprocessor   stylus
 
 ==/UserStyle== */
-@-moz-document regexp(".*.(png|jpg|gif|webp|svg)*") {
+@-moz-document regexp(".*.(png|jpg|gif|webp|svg).*") {
   body::before {
     content: '';
     position: fixed;
